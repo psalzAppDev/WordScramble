@@ -18,6 +18,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score: Int = 0
+    
     var body: some View {
         
         NavigationView {
@@ -35,6 +37,9 @@ struct ContentView: View {
                     Image(systemName: "\($0.count).circle")
                     Text($0)
                 }
+                
+                Text("Your score: \(score)")
+                    .font(.largeTitle)
             }
             .navigationBarTitle(rootWord)
             .navigationBarItems(
@@ -80,9 +85,14 @@ struct ContentView: View {
         
         usedWords.insert(answer, at: 0)
         newWord = ""
+        
+        calculateScore(word: answer)
     }
     
     func startGame() {
+        
+        score = 0
+        usedWords.removeAll()
         
         if let startWordsURL = Bundle.main.url(
             forResource: "start",
@@ -149,6 +159,13 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func calculateScore(word: String) {
+        
+        let newScore = word.utf16.count * usedWords.count
+        
+        score += newScore
     }
 }
 
