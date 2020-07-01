@@ -99,7 +99,12 @@ struct ContentView: View {
     }
     
     func isOriginal(word: String) -> Bool {
-        !usedWords.contains(word)
+        
+        guard word != rootWord else {
+            return false
+        }
+        
+        return !usedWords.contains(word)
     }
     
     func isPossible(word: String) -> Bool {
@@ -118,6 +123,10 @@ struct ContentView: View {
     }
     
     func isReal(word: String) -> Bool {
+        
+        guard word.utf16.count > 2 else {
+            return false
+        }
         
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
